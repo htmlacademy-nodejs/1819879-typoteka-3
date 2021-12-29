@@ -1,7 +1,8 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const {getRandomInt} = require(`../../utils`);
+const chalk = require(`chalk`);
 const {ExitCode, DEFAULT_QYANTITY, MAX_QYANTITY} = require(`../../../constants`);
 
 const MAX_ANNOUNCES = 5;
@@ -88,26 +89,26 @@ const getRandomPost = () => ({
   "category": getRandomCategories()
 });
 
-const writeFile = (content) => {
-  fs.writeFile(FILE_NAME, content, (error) => {
-    if (error) {
-      console.error(`Write file failed... - ${error}`);
-      process.exit(ExitCode.ERROR);
-    }
-    console.info(`Write file success`);
+const writeFile = async (content) => {
+  try {
+    await fs.writeFile(FILE_NAME, content);
+    console.info(chalk.green(`Write file success`));
     process.exit(ExitCode.SUCCESS);
-  });
+  } catch (error) {
+    console.error(chalk.red(`Write file failed... - ${error}`));
+    process.exit(ExitCode.ERROR);
+  }
 };
 
 module.exports = {
   name: `--generate`,
   run(count = DEFAULT_QYANTITY) {
     if (count > MAX_QYANTITY) {
-      console.warn(`Не больше ${MAX_QYANTITY} публикаций`);
+      console.warn(chalk.red(`Не больше ${MAX_QYANTITY} публикаций`));
       process.exit(ExitCode.ERROR);
     }
 
     const randomCategoriesJson = JSON.stringify(new Array(count).fill(null).map(() => getRandomPost()));
-    writeFile(randomCategoriesJson);
+    writeFile(randomCategoriesJson).then();
   }
 };
