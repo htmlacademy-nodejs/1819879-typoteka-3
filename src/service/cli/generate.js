@@ -19,7 +19,9 @@ const SENTENCES_FILE_NAME = `sentences.txt`;
 const readFile = async (fileName) => {
   try {
     const content = await fs.readFile(`${DATA_PATH}${fileName}`, `utf8`);
-    return content.trim().split(`\n`);
+    return content.split(`\n`)
+      .map((text) => text.trim())
+      .filter((text) => Boolean(text));
   } catch (error) {
     console.error(chalk.red(`Write file failed... - ${error}`));
     return ``;
@@ -65,13 +67,13 @@ const getRandomPost = (titles, categories, sentences) => ({
   "category": getRandomCategories(categories)
 });
 
-const getRandomPosts = async (count) => {
-  const titlesData = await readFile(TITLES_FILE_NAME);
-  const categoriesData = await readFile(CATEGORIES_FILE_NAME);
-  const sentencesData = await readFile(SENTENCES_FILE_NAME);
-
+const getRandomPosts = async (count) => await Promise.all([
+  readFile(TITLES_FILE_NAME),
+  readFile(CATEGORIES_FILE_NAME),
+  readFile(SENTENCES_FILE_NAME)
+]).then(([titlesData, categoriesData, sentencesData]) => {
   return new Array(count).fill(null).map(() => getRandomPost(titlesData, categoriesData, sentencesData));
-};
+});
 
 module.exports = {
   name: `--generate`,
