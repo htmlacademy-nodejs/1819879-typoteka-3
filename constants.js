@@ -11,5 +11,12 @@ module.exports.ExitCode = {
   ERROR: 1,
 };
 
-module.exports.DEFAULT_QYANTITY = 1;
-module.exports.MAX_QYANTITY = 1000;
+module.exports.HttpCode = {
+  OK: 200,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+  FORBIDDEN: 403,
+  UNAUTHORIZED: 401
+};
+
+module.exports.MOCK_FILE_NAME = `mock.json`;
