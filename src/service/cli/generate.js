@@ -67,13 +67,14 @@ const getRandomPost = (titles, categories, sentences) => ({
   "category": getRandomCategories(categories)
 });
 
-const getRandomPosts = async (count) => await Promise.all([
-  readFile(TITLES_FILE_NAME),
-  readFile(CATEGORIES_FILE_NAME),
-  readFile(SENTENCES_FILE_NAME)
-]).then(([titlesData, categoriesData, sentencesData]) => {
+const getRandomPosts = async (count) => {
+  const [titlesData, categoriesData, sentencesData] = await Promise.all([
+    readFile(TITLES_FILE_NAME),
+    readFile(CATEGORIES_FILE_NAME),
+    readFile(SENTENCES_FILE_NAME)
+  ]);
   return new Array(count).fill(null).map(() => getRandomPost(titlesData, categoriesData, sentencesData));
-});
+};
 
 module.exports = {
   name: `--generate`,
@@ -84,6 +85,6 @@ module.exports = {
     }
 
     const randomCategoriesJson = JSON.stringify(await getRandomPosts(count));
-    writeFile(randomCategoriesJson).then();
+    await writeFile(randomCategoriesJson);
   }
 };
