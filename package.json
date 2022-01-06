@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node ./src/service/service.js --server",
     "start.dev": "nodemon ./src/service/service.js --server",
+    "start-front-server": "node ./src/express/express.js",
+    "start-front-server.dev": "nodemon ./src/express/express.js",
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/"
   },
@@ -25,6 +27,7 @@
     "nodemon": "2.0.15"
   },
   "dependencies": {
-    "chalk": "4.1.2"
+    "chalk": "4.1.2",
+    "express": "4.17.2"
   }
 }
