@@ -3,13 +3,14 @@
 const fs = require(`fs`).promises;
 const {getRandomInt} = require(`../../utils`);
 const chalk = require(`chalk`);
-const {ExitCode, DEFAULT_QYANTITY, MAX_QYANTITY} = require(`../../../constants`);
+const {ExitCode, DEFAULT_RADIX, MOCK_FILE_NAME} = require(`../../../constants`);
 
+const DEFAULT_QYANTITY = 1;
+const MAX_QYANTITY = 1000;
 const MAX_ANNOUNCES = 5;
 const MAX_SENTENCES = 15;
 const DAY_INT = 24 * 3600 * 1000;
 const MAX_DAY_SUBTRACTION = 90;
-const FILE_NAME = `mock.json`;
 
 const DATA_PATH = `./data/`;
 const TITLES_FILE_NAME = `titles.txt`;
@@ -30,7 +31,7 @@ const readFile = async (fileName) => {
 
 const writeFile = async (content) => {
   try {
-    await fs.writeFile(FILE_NAME, content);
+    await fs.writeFile(MOCK_FILE_NAME, content);
     console.info(chalk.green(`Write file success`));
     process.exit(ExitCode.SUCCESS);
   } catch (error) {
@@ -67,23 +68,26 @@ const getRandomPost = (titles, categories, sentences) => ({
   "category": getRandomCategories(categories)
 });
 
-const getRandomPosts = async (count) => await Promise.all([
-  readFile(TITLES_FILE_NAME),
-  readFile(CATEGORIES_FILE_NAME),
-  readFile(SENTENCES_FILE_NAME)
-]).then(([titlesData, categoriesData, sentencesData]) => {
+const getRandomPosts = async (count) => {
+  const [titlesData, categoriesData, sentencesData] = await Promise.all([
+    readFile(TITLES_FILE_NAME),
+    readFile(CATEGORIES_FILE_NAME),
+    readFile(SENTENCES_FILE_NAME)
+  ]);
   return new Array(count).fill(null).map(() => getRandomPost(titlesData, categoriesData, sentencesData));
-});
+};
 
 module.exports = {
   name: `--generate`,
-  async run(count = DEFAULT_QYANTITY) {
-    if (count > MAX_QYANTITY) {
+  async run(customQyantity) {
+    const qyantity = Number.parseInt(customQyantity, DEFAULT_RADIX) || DEFAULT_QYANTITY;
+
+    if (qyantity > MAX_QYANTITY) {
       console.warn(chalk.red(`Не больше ${MAX_QYANTITY} публикаций`));
       process.exit(ExitCode.ERROR);
     }
 
-    const randomCategoriesJson = JSON.stringify(await getRandomPosts(count));
-    writeFile(randomCategoriesJson).then();
+    const randomCategoriesJson = JSON.stringify(await getRandomPosts(qyantity));
+    await writeFile(randomCategoriesJson);
   }
 };
