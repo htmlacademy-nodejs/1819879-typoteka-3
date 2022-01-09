@@ -1,56 +1,34 @@
 'use strict';
 
 const chalk = require(`chalk`);
-const http = require(`http`);
+const express = require(`express`);
 const fs = require(`fs`).promises;
 const {DEFAULT_RADIX, HttpCode, MOCK_FILE_NAME} = require(`../../../constants`);
 
 const DEFAULT_PORT = 3000;
+const TEXT_NOT_FOUND = `Not found`;
 
-const sendResponse = (res, statusCode, message) => {
-  const template = `
-    <!Doctype html>
-      <html lang="ru">
-      <head>
-        <title>With love from Node</title>
-      </head>
-      <body>${message}</body>
-    </html>`.trim();
-
-  res.writeHead(statusCode, {
-    'Content-Type': `text/html; charset=UTF-8`
-  });
-  res.end(template);
-};
-
-const onClientConnect = async (req, res) => {
-  const textNotFound = `Not found`;
-
-  if (req.url === `/`) {
-    try {
-      const fileContent = await fs.readFile(MOCK_FILE_NAME, `utf8`);
-      const mockTitles = JSON.parse(fileContent).map((post) => `<li>${post.title}</li>`).join(``);
-      const message = `<ul>${mockTitles}</ul>`;
-      sendResponse(res, HttpCode.OK, message);
-    } catch (error) {
-      console.error(chalk.red(`Error response mock data - ${error.message}`));
-      sendResponse(res, HttpCode.NOT_FOUND, textNotFound);
-    }
-    return;
+const server = express();
+server.use(express.json());
+server.get(`/posts`, async (req, res) => {
+  try {
+    const fileContent = await fs.readFile(MOCK_FILE_NAME, `utf8`);
+    const mocks = JSON.parse(fileContent);
+    res.json(mocks);
+  } catch (error) {
+    console.error(chalk.red(`Error response mock data - ${error.message}`));
+    res.send([]);
   }
+});
 
-  sendResponse(res, HttpCode.NOT_FOUND, textNotFound);
-};
+server.use(`/`, (req, res) => res.status(HttpCode.NOT_FOUND).send(TEXT_NOT_FOUND));
 
 module.exports = {
   name: `--server`,
   run(customPort) {
     const port = Number.parseInt(customPort, DEFAULT_RADIX) || DEFAULT_PORT;
 
-    const server = http.createServer({port}, onClientConnect);
-    server.listen(port);
-
-    server.on(`listening`, (error) => {
+    server.listen(port, (error) => {
       if (error) {
         console.error(chalk.red(`Error started server ${error.message}`));
         return;
