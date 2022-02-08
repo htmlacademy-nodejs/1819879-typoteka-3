@@ -8,6 +8,7 @@ module.exports = (articleKeys) => (req, res, next) => {
 
   if (!isValid) {
     res.status(HttpCode.BAD_REQUEST).send(`Bad request`);
+    return;
   }
 
   next();

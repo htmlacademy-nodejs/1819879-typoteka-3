@@ -13,7 +13,7 @@ module.exports = async () => {
 
   try {
     const fileContent = await fs.readFile(MOCK_FILE_NAME, `utf8`);
-    data = JSON.parse(fileContent);
+    data = JSON.stringify(fileContent);
   } catch (error) {
     console.error(chalk.red(`Error response mock data - ${error.message}`));
   }

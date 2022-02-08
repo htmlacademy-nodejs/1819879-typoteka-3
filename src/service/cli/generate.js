@@ -3,8 +3,8 @@
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 const {getRandomInt} = require(`./../../utils`);
-const {nanoid} = require(`nanoid`);
-const {ExitCode, DEFAULT_RADIX, MOCK_FILE_NAME, MAX_ID_LENGTH} = require(`./../../../constants`);
+const {randomUUID} = require(`crypto`);
+const {ExitCode, DEFAULT_RADIX, MOCK_FILE_NAME} = require(`./../../../constants`);
 
 const DEFAULT_QYANTITY = 1;
 const MAX_QYANTITY = 1000;
@@ -66,13 +66,13 @@ const getRandomComment = (comments) => comments[getRandomInt(0, comments.length 
 const getRandomComments = (comments) => {
   const randomComments = Array(getRandomInt(0, comments.length - 1)).fill().map(() => getRandomComment(comments));
   return Array.from(new Set(randomComments)).map((comment) => ({
-    id: nanoid(MAX_ID_LENGTH),
+    id: randomUUID(),
     text: comment
   }));
 };
 
 const getRandomPost = (titles, categories, sentences, comments) => ({
-  "id": nanoid(MAX_ID_LENGTH),
+  "id": randomUUID(),
   "title": getRandomTitle(titles),
   "announce": getRandomSentences(sentences, MAX_ANNOUNCES),
   "fullText": getRandomSentences(sentences, MAX_SENTENCES),

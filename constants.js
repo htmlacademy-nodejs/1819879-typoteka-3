@@ -6,7 +6,7 @@ module.exports.USER_ARGV_INDEX = 2;
 
 module.exports.DEFAULT_RADIX = 10;
 
-module.exports.MAX_ID_LENGTH = 6;
+module.exports.MAX_REQUEST_SIZE = `10kb`;
 
 module.exports.ExitCode = {
   SUCCESS: 0,

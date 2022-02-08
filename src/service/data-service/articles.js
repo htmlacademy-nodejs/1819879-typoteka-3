@@ -1,7 +1,6 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {MAX_ID_LENGTH} = require(`./../../../constants`);
+const {randomUUID} = require(`crypto`);
 
 class ArticlesService {
   constructor(articles) {
@@ -18,7 +17,7 @@ class ArticlesService {
 
   create(article) {
     const newArticle = {
-      id: nanoid(MAX_ID_LENGTH),
+      id: randomUUID(),
       comments: [`test`],
       ...article
     };

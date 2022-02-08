@@ -1,7 +1,6 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {MAX_ID_LENGTH} = require(`./../../../constants`);
+const {randomUUID} = require(`crypto`);
 
 class CommentsService {
   findAll(article) {
@@ -10,7 +9,7 @@ class CommentsService {
 
   create(article, text) {
     const newComment = {
-      id: nanoid(MAX_ID_LENGTH),
+      id: randomUUID(),
       text
     };
 

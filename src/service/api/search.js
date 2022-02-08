@@ -13,6 +13,7 @@ module.exports = (appRoute, searchService) => {
 
     if (!query) {
       res.status(HttpCode.BAD_REQUEST).json(``);
+      return;
     }
 
     const searchResult = searchService.search(query);
