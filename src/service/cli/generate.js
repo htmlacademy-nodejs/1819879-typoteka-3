@@ -1,9 +1,10 @@
 'use strict';
 
 const fs = require(`fs`).promises;
-const {getRandomInt} = require(`../../utils`);
 const chalk = require(`chalk`);
-const {ExitCode, DEFAULT_RADIX, MOCK_FILE_NAME} = require(`../../../constants`);
+const {getRandomInt} = require(`./../../utils`);
+const {randomUUID} = require(`crypto`);
+const {ExitCode, DEFAULT_RADIX, MOCK_FILE_NAME} = require(`./../../../constants`);
 
 const DEFAULT_QYANTITY = 1;
 const MAX_QYANTITY = 1000;
@@ -16,6 +17,7 @@ const DATA_PATH = `./data/`;
 const TITLES_FILE_NAME = `titles.txt`;
 const CATEGORIES_FILE_NAME = `categories.txt`;
 const SENTENCES_FILE_NAME = `sentences.txt`;
+const COMMENTS_FILE_NAME = `comments.txt`;
 
 const readFile = async (fileName) => {
   try {
@@ -60,21 +62,40 @@ const getRandomDate = () => {
   return new Date(dateNowInt - subtractionDaysInt);
 };
 
-const getRandomPost = (titles, categories, sentences) => ({
+const getRandomComment = (comments) => comments[getRandomInt(0, comments.length - 1)];
+const getRandomComments = (comments) => {
+  const randomComments = Array(getRandomInt(0, comments.length - 1)).fill().map(() => getRandomComment(comments));
+  return Array.from(new Set(randomComments)).map((comment) => ({
+    id: randomUUID(),
+    text: comment
+  }));
+};
+
+const getRandomPost = (titles, categories, sentences, comments) => ({
+  "id": randomUUID(),
   "title": getRandomTitle(titles),
   "announce": getRandomSentences(sentences, MAX_ANNOUNCES),
   "fullText": getRandomSentences(sentences, MAX_SENTENCES),
   "createdDate": getRandomDate(),
-  "category": getRandomCategories(categories)
+  "category": getRandomCategories(categories),
+  "comments": getRandomComments(comments)
 });
 
 const getRandomPosts = async (count) => {
-  const [titlesData, categoriesData, sentencesData] = await Promise.all([
+  const [
+    titlesData,
+    categoriesData,
+    sentencesData,
+    commentsData
+  ] = await Promise.all([
     readFile(TITLES_FILE_NAME),
     readFile(CATEGORIES_FILE_NAME),
-    readFile(SENTENCES_FILE_NAME)
+    readFile(SENTENCES_FILE_NAME),
+    readFile(COMMENTS_FILE_NAME)
   ]);
-  return new Array(count).fill(null).map(() => getRandomPost(titlesData, categoriesData, sentencesData));
+  return new Array(count)
+    .fill(null)
+    .map(() => getRandomPost(titlesData, categoriesData, sentencesData, commentsData));
 };
 
 module.exports = {
