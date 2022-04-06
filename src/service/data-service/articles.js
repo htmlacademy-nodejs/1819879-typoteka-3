@@ -18,7 +18,6 @@ class ArticlesService {
   create(article) {
     const newArticle = {
       id: randomUUID(),
-      comments: [`test`],
       ...article
     };
     this._articles.push(newArticle);

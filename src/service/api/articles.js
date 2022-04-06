@@ -21,6 +21,7 @@ module.exports = (routeApp, articlesService, commentsService) => {
 
     if (article) {
       res.status(HttpCode.OK).json(article);
+      return;
     }
 
     res.status(HttpCode.NOT_FOUND).send(`Not found`);
