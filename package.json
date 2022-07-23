@@ -8,9 +8,11 @@
     "start.dev": "cross-env NODE_ENV=development nodemon ./src/service/service.js --server",
     "start-front-server": "node ./src/express/express.js",
     "start-front-server.dev": "nodemon ./src/express/express.js",
+    "start.dev-all": "start npm run start.dev && start npm run start-front-server.dev",
     "test": "npm run eslint && npm run jest",
     "eslint": "eslint --ext .js src/",
-    "jest": "jest"
+    "jest": "jest",
+    "generate": "node ./src/service/service.js --generate 1000"
   },
   "repository": {
     "type": "git",
