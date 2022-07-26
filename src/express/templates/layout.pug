@@ -11,6 +11,17 @@ html(lang='ru')
     link(rel='preload' href='/fonts/SFProDisplay-Regular.woff2' as='font' crossorigin='anonymous')
     link(rel='stylesheet' href='/css/style.min.css')
   body
+    mixin insertArticlePreviewImg(article)
+      img.preview__background-image(
+        src=`/img/${article.picture ? article.picture : `forest@2x.jpg`}`
+        width='460'
+        height='240'
+        alt=article.title)
+
+    mixin insertTransformDate(insertedDate)
+      -var date = new Date(insertedDate)
+      | #{`${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`}
+
     .wrapper
       include  partials/header
       block content
