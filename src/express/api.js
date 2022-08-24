@@ -19,6 +19,10 @@ class API {
     return response.data;
   }
 
+  search(query) {
+    return this._load(`/search`, {params: {query}});
+  }
+
   getArticles() {
     return this._load(`/articles`);
   }
