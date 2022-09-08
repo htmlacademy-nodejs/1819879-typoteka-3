@@ -12,6 +12,7 @@ const {USER_ARGV_INDEX, DEFAULT_RADIX} = require(`../../constants`);
 const DEFAULT_PORT = 8080;
 const PUBLIC_DIR = `public`;
 const TEMPLATES_DIR = `templates`;
+const UPLOAD_DIR = `upload`;
 
 const customPort = process.argv[USER_ARGV_INDEX];
 const port = Number.parseInt(customPort, DEFAULT_RADIX) || DEFAULT_PORT;
@@ -28,6 +29,7 @@ const app = express();
 app.set(`views`, path.resolve(__dirname, TEMPLATES_DIR));
 app.set(`view engine`, `pug`);
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.use(express.static(path.resolve(__dirname, UPLOAD_DIR)));
 
 app.use(`/`, mainRouter);
 app.use(`/my`, myRouter);

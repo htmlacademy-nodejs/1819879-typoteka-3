@@ -31,8 +31,8 @@ class API {
     return this._load(`/articles/${id}`);
   }
 
-  createArticle({articleData}) {
-    return this._load(`/article`, {
+  createArticle(articleData) {
+    return this._load(`/articles`, {
       method: `post`,
       data: articleData
     });
