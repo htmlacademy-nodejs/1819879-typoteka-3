@@ -10,3 +10,5 @@ module.exports.getRandomInt = (min, max) => {
 module.exports.includesQuery = (text, query) => {
   return text.trim().toLowerCase().includes(query.trim().toLowerCase());
 };
+
+module.exports.ensureArray = (value) => Array.isArray(value) ? value : [value];
