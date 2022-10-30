@@ -4,7 +4,7 @@ const path = require(`path`);
 const {randomUUID} = require(`crypto`);
 const {Router} = require(`express`);
 const multer = require(`multer`);
-const {ensureArray} = require(`src/utils`);
+const {ensureArray} = require(`../../utils`);
 const api = require(`../api`).getAPI();
 
 const UPLOAD_IMG_DIR = `upload/img`;
