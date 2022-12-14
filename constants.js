@@ -29,6 +29,7 @@ module.exports.HttpCode = {
 };
 
 module.exports.MOCK_FILE_NAME = `mock.json`;
+module.exports.FILL_DB_FILE_NAME = `fill-db.sql`;
 
 module.exports.EntityProps = {
   ARTICLE: [`title`, `announce`, `fullText`, `category`],

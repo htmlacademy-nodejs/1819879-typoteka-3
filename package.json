@@ -12,7 +12,8 @@
     "test": "npm run eslint && npm run jest",
     "eslint": "eslint --ext .js src/",
     "jest": "jest",
-    "generate": "node ./src/service/service.js --generate 1000"
+    "generate": "node ./src/service/service.js --generate 1000",
+    "fill": "node ./src/service/service.js --fill 3"
   },
   "repository": {
     "type": "git",
