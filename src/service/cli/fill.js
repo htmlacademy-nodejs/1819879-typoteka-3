@@ -2,7 +2,7 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
-const {getRandomInt} = require(`./../../utils`);
+const {getRandomInt, getRandomEntity} = require(`./../../utils`);
 const {ExitCode, DEFAULT_RADIX, FILL_DB_FILE_NAME} = require(`./../../../constants`);
 
 const DEFAULT_QUANTITY = 1;
@@ -45,24 +45,23 @@ const writeFile = async (content) => {
   }
 };
 
-
-const getRandomTitle = (titles) => titles[getRandomInt(0, titles.length - 1)];
-
-const getRandomSentence = (sentences) => sentences[getRandomInt(0, sentences.length - 1)];
 const getRandomSentences = (sentences, maxQuantity) => Array(getRandomInt(0, maxQuantity))
   .fill(null)
-  .map(() => getRandomSentence(sentences))
+  .map(() => getRandomEntity(sentences))
   .join(` `);
 
-const getRandomCategory = (categories) => categories[getRandomInt(0, categories.length - 1)];
 const getRandomCategories = (categories) => {
-  const randomCategories = Array(getRandomInt(0, categories.length - 1)).fill().map(() => getRandomCategory(categories));
+  const randomCategories = Array(getRandomInt(0, categories.length - 1))
+    .fill({})
+    .map(() => getRandomEntity(categories));
   return Array.from(new Set(randomCategories));
 };
-const getRandomComment = (comments) => comments[getRandomInt(0, comments.length - 1)];
+
 const generateComments = (comments, users, articleId) => {
-  const randomComments = Array(getRandomInt(2, MAX_COMMENTS)).fill({}).map(() => getRandomComment(comments));
-  return Array.from(new Set(randomComments)).map((comment) => ({
+  const randomComments = Array(getRandomInt(2, MAX_COMMENTS))
+    .fill({})
+    .map(() => getRandomEntity(comments));
+  return randomComments.map((comment) => ({
     text: comment,
     userId: getRandomInt(0, users.length),
     articleId
@@ -73,7 +72,7 @@ const getImageFileName = (number) => `item${number.toString().padStart(2, 0)}.jp
 
 const generateArticles = (count, titlesData, sentencesData, commentsData, users) =>
   Array(count).fill({}).map((_, index) => ({
-    "title": getRandomTitle(titlesData),
+    "title": getRandomEntity(titlesData),
     "announce": getRandomSentences(sentencesData, MAX_ANNOUNCES),
     "fullText": getRandomSentences(sentencesData, MAX_SENTENCES),
     "image": getImageFileName(getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)),

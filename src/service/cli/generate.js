@@ -2,7 +2,7 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
-const {getRandomInt} = require(`./../../utils`);
+const {getRandomInt, getRandomEntity} = require(`./../../utils`);
 const {randomUUID} = require(`crypto`);
 const {ExitCode, DEFAULT_RADIX, MOCK_FILE_NAME} = require(`./../../../constants`);
 
@@ -42,17 +42,13 @@ const writeFile = async (content) => {
   }
 };
 
-const getRandomTitle = (titles) => titles[getRandomInt(0, titles.length - 1)];
-
-const getRandomSentence = (sentences) => sentences[getRandomInt(0, sentences.length - 1)];
 const getRandomSentences = (sentences, maxQuantity) => Array(getRandomInt(0, maxQuantity))
   .fill(null)
-  .map(() => getRandomSentence(sentences))
+  .map(() => getRandomEntity(sentences))
   .join(` `);
 
-const getRandomCategory = (categories) => categories[getRandomInt(0, categories.length - 1)];
 const getRandomCategories = (categories) => {
-  const randomCategories = Array(getRandomInt(0, categories.length - 1)).fill().map(() => getRandomCategory(categories));
+  const randomCategories = Array(getRandomInt(0, categories.length - 1)).fill().map(() => getRandomEntity(categories));
   return Array.from(new Set(randomCategories));
 };
 
@@ -62,9 +58,8 @@ const getRandomDate = () => {
   return new Date(dateNowInt - subtractionDaysInt);
 };
 
-const getRandomComment = (comments) => comments[getRandomInt(0, comments.length - 1)];
 const getRandomComments = (comments) => {
-  const randomComments = Array(getRandomInt(0, comments.length - 1)).fill().map(() => getRandomComment(comments));
+  const randomComments = Array(getRandomInt(0, comments.length - 1)).fill().map(() => getRandomEntity(comments));
   return Array.from(new Set(randomComments)).map((comment) => ({
     id: randomUUID(),
     text: comment
@@ -73,7 +68,7 @@ const getRandomComments = (comments) => {
 
 const getRandomPost = (titles, categories, sentences, comments) => ({
   "id": randomUUID(),
-  "title": getRandomTitle(titles),
+  "title": getRandomEntity(titles),
   "announce": getRandomSentences(sentences, MAX_ANNOUNCES),
   "fullText": getRandomSentences(sentences, MAX_SENTENCES),
   "createdDate": getRandomDate(),
