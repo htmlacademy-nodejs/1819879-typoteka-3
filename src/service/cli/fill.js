@@ -63,7 +63,7 @@ const generateComments = (comments, users, articleId) => {
     .map(() => getRandomEntity(comments));
   return randomComments.map((comment) => ({
     text: comment,
-    userId: getRandomInt(0, users.length),
+    userId: getRandomInt(0, users.length - 1),
     articleId
   }));
 };
@@ -76,7 +76,7 @@ const generateArticles = (count, titlesData, sentencesData, commentsData, users)
     "announce": getRandomSentences(sentencesData, MAX_ANNOUNCES),
     "fullText": getRandomSentences(sentencesData, MAX_SENTENCES),
     "image": getImageFileName(getRandomInt(PictureRestrict.MIN, PictureRestrict.MAX)),
-    "userId": getRandomInt(1, users.length),
+    "userId": getRandomInt(0, users.length - 1),
     "comments": generateComments(commentsData, users, index)
   }));
 
