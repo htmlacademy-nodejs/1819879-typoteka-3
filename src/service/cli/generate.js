@@ -6,8 +6,8 @@ const {getRandomInt} = require(`./../../utils`);
 const {randomUUID} = require(`crypto`);
 const {ExitCode, DEFAULT_RADIX, MOCK_FILE_NAME} = require(`./../../../constants`);
 
-const DEFAULT_QYANTITY = 1;
-const MAX_QYANTITY = 1000;
+const DEFAULT_QUANTITY = 1;
+const MAX_QUANTITY = 1000;
 const MAX_ANNOUNCES = 5;
 const MAX_SENTENCES = 15;
 const DAY_INT = 24 * 3600 * 1000;
@@ -45,7 +45,7 @@ const writeFile = async (content) => {
 const getRandomTitle = (titles) => titles[getRandomInt(0, titles.length - 1)];
 
 const getRandomSentence = (sentences) => sentences[getRandomInt(0, sentences.length - 1)];
-const getRandomSentences = (sentences, maxQyantity) => Array(getRandomInt(0, maxQyantity))
+const getRandomSentences = (sentences, maxQuantity) => Array(getRandomInt(0, maxQuantity))
   .fill(null)
   .map(() => getRandomSentence(sentences))
   .join(` `);
@@ -100,15 +100,15 @@ const getRandomPosts = async (count) => {
 
 module.exports = {
   name: `--generate`,
-  async run(customQyantity) {
-    const qyantity = Number.parseInt(customQyantity, DEFAULT_RADIX) || DEFAULT_QYANTITY;
+  async run(customQuantity) {
+    const quantity = Number.parseInt(customQuantity, DEFAULT_RADIX) || DEFAULT_QUANTITY;
 
-    if (qyantity > MAX_QYANTITY) {
-      console.warn(chalk.red(`Не больше ${MAX_QYANTITY} публикаций`));
+    if (quantity > MAX_QUANTITY) {
+      console.warn(chalk.red(`Не больше ${MAX_QUANTITY} публикаций`));
       process.exit(ExitCode.ERROR);
     }
 
-    const randomCategoriesJson = JSON.stringify(await getRandomPosts(qyantity));
-    await writeFile(randomCategoriesJson);
+    const randomPostsJson = JSON.stringify(await getRandomPosts(quantity));
+    await writeFile(randomPostsJson);
   }
 };
