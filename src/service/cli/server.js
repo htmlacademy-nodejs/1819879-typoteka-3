@@ -29,7 +29,7 @@ server.use(`/`, (req, res) => {
 });
 
 server.use((err, _req, res, _next) => {
-  logger.error(`An error occured on processing request: ${err.stack}`);
+  logger.error(`An error occurred on processing request: ${err.stack}`);
   res.status(HttpCode.INTERNAL_SERVER_ERROR).send(`Internal error`);
 });
 
@@ -40,7 +40,7 @@ module.exports = {
       logger.info(`Trying to connect to database...`);
       await sequelize.authenticate();
     } catch (err) {
-      logger.error(`An error occured: ${err.message}`);
+      logger.error(`An error occurred: ${err.message}`);
       process.exit(1);
     }
     logger.info(`Connection to database established`);
